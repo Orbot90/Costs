@@ -2,17 +2,27 @@ package ru.orbot90.user;
 
 import ru.orbot90.record.Cost;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Класс, описывающий пользователя
  */
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue
     private long id;
+    @Column(name = "user_name", nullable = false)
     private String userName;
+    @Column(name = "user_full_name")
     private String fullName;
+    @Column(name = "user_password", nullable = false)
     private String password;
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Cost> costs;
+    @Column(name = "balance")
     private long balance;
 
     public User() {
