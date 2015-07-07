@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
-    @Column(name = "user_name", nullable = false)
+    @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
     @Column(name = "user_full_name")
     private String fullName;
@@ -27,6 +27,12 @@ public class User {
 
     public User() {
         balance = 0;
+    }
+
+    public User(String userName, String password, String balance) {
+        this.userName = userName;
+        this.password = password;
+        this.balance = Long.parseLong(balance);
     }
 
     public long getId() {

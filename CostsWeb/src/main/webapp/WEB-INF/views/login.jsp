@@ -22,5 +22,7 @@
   <br />
   <input type="submit" value="Войти" />
 </form>
+<br />
+<p>Или <a href="${pageContext.request.contextPath}/join">присоединяйтесь</a> к нашей системе</p>
 </body>
 </html>

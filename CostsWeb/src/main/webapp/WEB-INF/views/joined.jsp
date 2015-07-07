@@ -8,9 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title></title>
+    <title>Вы успешно зарегистрировались!</title>
 </head>
 <body>
-
+  <p>Поздравляю! Вы успешно зарегистрировались в системе. Теперь можете <a href="/login">войти</a>.</p>
 </body>
 </html>

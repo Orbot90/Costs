@@ -12,5 +12,11 @@
 </head>
 <body>
 <p>Поздравляю! Вы успешно залогинились</p>
+<script language="JavaScript" type="text/javascript">
+  function reDirect(){
+    document.location.href="${pageContext.request.contextPath}/main";
+  }
+  setTimeout( 'reDirect()', 1000 );
+</script>
 </body>
 </html>

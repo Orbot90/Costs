@@ -18,5 +18,10 @@
             <artifactId>spring-webmvc</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>ru.orbot90</groupId>
+            <artifactId>costs-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

@@ -5,6 +5,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.orbot90.user.Authorization;
 
 /**
  * Created by orbot on 06.07.15.
@@ -24,5 +25,27 @@ public class CostsController {
             return "success";
         }
         return "login";
+    }
+
+    @RequestMapping("/main")
+    public String showMain(ModelMap model) {
+        return "main";
+    }
+
+    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    public String joinProcess(ModelMap model, @RequestParam(value = "login")String username,
+                       @RequestParam(value = "password")String password,
+                       @RequestParam(value = "balance")String balance) {
+        if(Authorization.getInstance().userJoin(username, password, balance)) {
+            return "joined";
+        } else {
+            model.addAttribute("notregistered");
+            return "registration";
+        }
+    }
+
+    @RequestMapping(value = "/join", method = RequestMethod.GET)
+    public String join(ModelMap model) {
+        return "registration";
     }
 }

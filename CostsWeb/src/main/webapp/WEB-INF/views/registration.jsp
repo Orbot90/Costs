@@ -12,7 +12,7 @@
 </head>
 <body>
   <h1>Введите свои данные для регистрации</h1>
-<form action="#" method="post">
+<form action="${pageContext.request.contextPath}/join" method="post">
   <label for="login">Логин:</label>
   <input type="text" size="15" id="login" name="login" />
   <br />
@@ -21,6 +21,9 @@
   <br />
   <label for="pass_again">Повторите пароль:</label>
   <input type="password" size="15" id="pass_again" />
+  <br />
+  <label for="bal">Стартовый баланс:</label>
+  <input type="number" size="10" id="bal" name="balance" />
   <br />
   <input type="submit" value="Зарегистрироваться" />
 </form>
