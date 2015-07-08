@@ -28,4 +28,11 @@ public class Authorization {
         }
         return true;
     }
+
+    public boolean authorize(String userName, String password) {
+        if("username".equals(userName) && "password".equals(password)) {
+            return true;
+        }
+        else return false;
+    }
 }
