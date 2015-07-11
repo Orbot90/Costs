@@ -13,12 +13,12 @@
 </head>
 <body>
 <h1>Введите логин и пароль для доступа к приложению.</h1>
-<form action="/j_spring_security_check" method="post">
+<form method="post">
   <label for="username">Логин:</label>
-  <input id="username" name="j_username" type="text" size="15">
+  <input id="username" name="username" type="text" size="15">
   <br />
   <label for="pass">Пароль:</label>
-  <input id="pass" type="password" name="j_password" size="15">
+  <input id="pass" type="password" name="password" size="15">
   <br />
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
   <input type="submit" value="Войти" />
