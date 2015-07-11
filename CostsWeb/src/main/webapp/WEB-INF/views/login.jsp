@@ -20,6 +20,8 @@
   <label for="pass">Пароль:</label>
   <input id="pass" type="password" name="password" size="15">
   <br />
+  <label><input type="checkbox" name="remember-me" />Запомнить меня</label>
+  <br />
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
   <input type="submit" value="Войти" />
 </form>

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import ru.orbot90.model.UserService;
 
 /**
@@ -23,6 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .eraseCredentials(true)
                 .userDetailsService(userService())
                 .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public TokenBasedRememberMeServices rememberMeServices() {
+        return new TokenBasedRememberMeServices("remember-me", getUserService());
     }
 
     @Bean
@@ -41,10 +47,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/main").access("hasRole('ROLE_USER')")
+                .antMatchers("/join").permitAll()
+                .anyRequest()
+                .access("hasRole('ROLE_USER')")
                 .and().formLogin()
-                .loginPage("/")
+                .loginPage("/login")
                 .permitAll()
-                .defaultSuccessUrl("/main", false);
+                .defaultSuccessUrl("/main", false)
+                .and()
+                .rememberMe()
+                .rememberMeServices(rememberMeServices())
+                .key("remember-me");
     }
 }

@@ -22,21 +22,12 @@ public class CostsController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String showLoginPage(ModelMap model) {
         return "login";
     }
 
-    @RequestMapping(value = "/login*", method = RequestMethod.POST)
-    public String loginPage(ModelMap model, @RequestParam(value = "login", required = false)String username,
-                            @RequestParam(value = "password",required = false)String password) {
-        if("user".equals(username) && ("password".equals(password))) {
-            return "success";
-        }
-        return "login";
-    }
-
-    @RequestMapping("/main")
+    @RequestMapping({"/main", "/"})
     public String showMain(ModelMap model) {
         return "main";
     }
