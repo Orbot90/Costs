@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.orbot90.user.User;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
@@ -23,6 +24,17 @@ public class UserService implements UserDetailsService {
     public User curUser;
     @Autowired
     UserRepository accountRepository;
+
+    @PostConstruct
+    public void createTestUser() {
+        createUserIfNotExists(new User("test", "test", "0", "test@test.ru"));
+    }
+
+    private void createUserIfNotExists(User user) {
+        if(accountRepository.getUserByUserName(user.getUserName()) == null) {
+            accountRepository.save(user);
+        }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

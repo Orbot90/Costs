@@ -46,4 +46,11 @@ public class CostsController {
         userService.signIn(user);
         return "joined";
     }
+
+    @RequestMapping(value = "/test")
+    public String testEnter(ModelMap model) {
+        User user = accountRepository.getUserByUserName("test");
+        userService.signIn(user);
+        return "success";
+    }
 }

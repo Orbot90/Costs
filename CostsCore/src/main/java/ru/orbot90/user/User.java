@@ -42,6 +42,7 @@ public class User {
         this.password = password;
         this.balance = Long.parseLong(balance);
         this.eMail = email;
+        this.role = "ROLE_USER";
     }
 
     public long getId() {

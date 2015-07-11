@@ -27,5 +27,7 @@
 </form>
 <br />
 <p>Или <a href="${pageContext.request.contextPath}/join">присоединяйтесь</a> к нашей системе</p>
+<br />
+<p>Также вы можете зайти в систему под <a href="${pageContext.request.contextPath}/test">тестовым пользователем</a> для демонстрациии</p>
 </body>
 </html>

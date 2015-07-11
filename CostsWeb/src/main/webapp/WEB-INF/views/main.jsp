@@ -13,11 +13,20 @@
     function showForm() {
       document.getElementById("newcostform").style.display = "block";
     }
+
+    function logOut() {
+      document.forms["logoutform"].submit();
+    }
   </script>
 
 </head>
 <body>
-  Здесь вы можете посмотреть историю своего дохода и расходов, либо добавить <a href="#" onclick="showForm(); return false;" >новую запись</a>.
+<form id="logoutform" action="${pageContext.request.contextPath}/logout" method="post">
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form>
+<a href="#" onclick="logOut();">Выйти</a>
+
+  <p>Здесь вы можете посмотреть историю своего дохода и расходов, либо добавить <a href="#" onclick="showForm(); return false;" >новую запись</a>.</p>
 
 <div id="newcostform" style="display: none;">
   <form action="#" method="post">
