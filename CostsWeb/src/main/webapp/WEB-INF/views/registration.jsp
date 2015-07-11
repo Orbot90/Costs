@@ -25,6 +25,10 @@
   <label for="bal">Стартовый баланс:</label>
   <input type="number" size="10" id="bal" name="balance" />
   <br />
+  <label for="email">Email:</label>
+  <input type="text" size="15" id="email" name="email">
+  <br />
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
   <input type="submit" value="Зарегистрироваться" />
 </form>
 </body>
