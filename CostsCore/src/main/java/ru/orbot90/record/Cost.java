@@ -11,7 +11,16 @@ import java.util.List;
  */
 @Entity
 @Table(name = "costs")
+@NamedQueries({
+        @NamedQuery(name = Cost.GET_COST_LIST_BY_DATE, query = "select c from Cost c where c.user.id = :id and c.date > :beginDate and c.date < :finishDate"),
+        @NamedQuery(name = Cost.GET_COST_LIST_BY_USER, query = "select c from Cost c where c.user.userName = :username")
+})
+
 public class Cost {
+
+    public static final String GET_COST_LIST_BY_DATE = "Cost.findByDate";
+    public static final String GET_COST_LIST_BY_USER = "Cost.findByUser";
+
     @Id
     @GeneratedValue
     private long id;
@@ -31,9 +40,17 @@ public class Cost {
     private boolean cost;
     // баланс по состоянию на эту запись
     @Column(name = "cur_balance")
-    private long currentBalance;
+    private double currentBalance;
 
     public Cost() {
+    }
+
+    public Cost(double value, String description, boolean cost, List<String> tags, User user) {
+        this.value = value;
+        this.user = user;
+        this.tags = tags;
+        this.description = description;
+        this.cost = cost;
     }
 
     public long getId() {
@@ -92,11 +109,11 @@ public class Cost {
         this.cost = cost;
     }
 
-    public long getCurrentBalance() {
+    public double getCurrentBalance() {
         return currentBalance;
     }
 
-    public void setCurrentBalance(long currentBalance) {
+    public void setCurrentBalance(double currentBalance) {
         this.currentBalance = currentBalance;
     }
 }

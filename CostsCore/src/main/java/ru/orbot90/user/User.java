@@ -26,10 +26,10 @@ public class User {
     private String fullName;
     @Column(name = "user_password", nullable = false)
     private String password;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Cost> costs;
     @Column(name = "balance")
-    private long balance;
+    private double balance;
 
     private String role = "ROLE_USER";
 
@@ -85,11 +85,11 @@ public class User {
         this.costs = costs;
     }
 
-    public long getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -107,5 +107,17 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void addCost(Cost cost) {
+        costs.add(cost);
+    }
+
+    public void increaseBal(double money) {
+        this.balance += money;
+    }
+
+    public void decreaseBal(double money) {
+        this.balance -= money;
     }
 }

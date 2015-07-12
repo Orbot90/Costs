@@ -39,6 +39,7 @@ public class UserRepository {
         User user = (User)session.getNamedQuery(User.FIND_BY_USERNAME)
                 .setString("userName", userName)
                 .uniqueResult();
+        session.close();
         return user;
     }
 

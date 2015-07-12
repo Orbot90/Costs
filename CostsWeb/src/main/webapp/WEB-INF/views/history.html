@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+</head>
+<body>
+<a th:href="@{/main}">На главную</a>
+<br />
+<br />
+<th:block th:each="cost : ${costlist}">
+    <span th:if="${cost.isCost()}">Расход</span>
+    <span th:if="${!cost.isCost()}">Доход</span>
+    <div>Дата: <span th:text="${cost.getDate()}" />
+    <br />
+    Количество: <span th:text="${cost.getValue()}" />
+    <br />
+    Описание: <span th:text="${cost.getDescription()}" />
+    <br />
+    Тэги: <span th:text="${cost.getTags()}" />
+    <br />
+    Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
+    <br />
+    <span>======================================</span>
+    <br />
+    </div>
+</th:block>
+
+</body>
+</html>

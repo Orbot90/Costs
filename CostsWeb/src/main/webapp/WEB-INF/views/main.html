@@ -5,6 +5,7 @@
   <script>
     function showForm() {
       document.getElementById("newcostform").style.display = "block";
+      document.getElementById("date").valueAsDate = new Date();
     }
 
     function logOut() {
@@ -14,18 +15,22 @@
 
 </head>
 <body>
-<h2>Hello, <span th:text="${username}"></span></h2>
+<h2>Здравствуйте, <span th:text="${username}" /></h2>
+<p>Ваш текущий баланс: <span th:text="${balance}" /></p>
 <form id="logoutform" th:action="@{/logout}" method="post">
   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 </form>
 <a href="#" onclick="logOut();">Выйти</a>
 
-  <p>Здесь вы можете посмотреть историю своего дохода и расходов, либо добавить <a href="#" onclick="showForm(); return false;" >новую запись</a>.</p>
+  <p>Здесь вы можете посмотреть <a th:href="@{/history}">историю</a> своего дохода и расходов, либо добавить <a href="#" onclick="showForm(); return false;" >новую запись</a>.</p>
 
 <div id="newcostform" style="display: none;">
-  <form action="#" method="post">
+  <form action="/main" method="post">
     <label for="num">Сумма:</label><br />
     <input type="number" id="num" name="value" />
+    <br />
+    <label for="date">Дата:</label>
+    <input type="date" id="date" name="date" />
     <br />
     <label for="desc">Описание:</label>
     <br />
@@ -40,5 +45,8 @@
     <input type="submit" value="Отправить" />
   </form>
 </div>
+<th:block th:if="${param.parseerror != null}">
+  <div style="color: red;">Неправильный формат даты</div>
+</th:block>
 </body>
 </html>
