@@ -6,9 +6,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ru.orbot90.model.UserRepository;
 import ru.orbot90.model.UserService;
 import ru.orbot90.user.User;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 /**
  * Created by orbot on 06.07.15.
@@ -24,17 +28,24 @@ public class CostsController {
 
     @RequestMapping("/login")
     public String showLoginPage(ModelMap model) {
-        return "/WEB-INF/views/login.html";
+        return "login";
     }
 
     @RequestMapping({"/main", "/"})
-    public String showMain(ModelMap model) {
-        return "/WEB-INF/views/main.html";
+    public ModelAndView showMain(HttpServletRequest req) {
+        ModelAndView mv = new ModelAndView("main");
+        Principal principal = req.getUserPrincipal();
+        String userName = "Not logged in";
+        if(principal != null) {
+            userName = principal.getName();
+        }
+        mv.addObject("username", userName);
+        return mv;
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.GET)
     public String join(ModelMap model) {
-        return "/WEB-INF/views/registration.html";
+        return "registration";
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -44,13 +55,13 @@ public class CostsController {
         User user = new User(userName, password, balance, email);
         accountRepository.save(user);
         userService.signIn(user);
-        return "/WEB-INF/views/joined.html";
+        return "joined";
     }
 
     @RequestMapping(value = "/test")
     public String testEnter(ModelMap model) {
         User user = accountRepository.getUserByUserName("test");
         userService.signIn(user);
-        return "/WEB-INF/views/success.html";
+        return "success";
     }
 }
