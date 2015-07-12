@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "costs")
 @NamedQueries({
-        @NamedQuery(name = Cost.GET_COST_LIST_BY_DATE, query = "select c from Cost c where c.user.id = :id and c.date > :beginDate and c.date < :finishDate"),
+        @NamedQuery(name = Cost.GET_COST_LIST_BY_DATE, query = "select c from Cost c where c.user.userName = :username and c.date > :beginDate and c.date < :finishDate"),
         @NamedQuery(name = Cost.GET_COST_LIST_BY_USER, query = "select c from Cost c where c.user.userName = :username")
 })
 
