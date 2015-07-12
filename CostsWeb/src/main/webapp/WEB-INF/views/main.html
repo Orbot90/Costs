@@ -1,14 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: orbot
-  Date: 06.07.15
-  Time: 23:18
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Главная страница</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8-" />
   <script>
     function showForm() {
       document.getElementById("newcostform").style.display = "block";
@@ -21,8 +14,8 @@
 
 </head>
 <body>
-<form id="logoutform" action="${pageContext.request.contextPath}/logout" method="post">
-  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<form id="logoutform" th:action="@{/logout}" method="post">
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 </form>
 <a href="#" onclick="logOut();">Выйти</a>
 
@@ -40,9 +33,10 @@
     <label for="tags">Тэги:</label><br />
     <input type="text" size="40" name="tags" id="tags" />
     <br />
-    <label><input type="radio" name="type" value="0" checked>Расход</label><br />
-    <label><input type="radio" name="type" value="1">Доход</label><br />
-    <input type="submit" value="Отправить">
+    <label><input type="radio" name="type" value="0" checked="true" />Расход</label><br />
+    <label><input type="radio" name="type" value="1" />Доход</label><br />
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="submit" value="Отправить" />
   </form>
 </div>
 </body>

@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добро пожаловать</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8-" />
+</head>
+<body>
+<h1>Введите логин и пароль для доступа к приложению.</h1>
+<th:block th:if="${param.logout != null}">
+  <div style="color:red;">Вы вышли из приложения</div>
+</th:block>
+<th:block th:if="${param.error != null}">
+  <div style="color:red;">Неверное имя пользователя или пароль</div>
+</th:block>
+<form method="post">
+  <label for="username">Логин:</label>
+  <input id="username" name="username" type="text" size="15" />
+  <br />
+  <label for="pass">Пароль:</label>
+  <input id="pass" type="password" name="password" size="15" />
+  <br />
+  <label><input type="checkbox" name="remember-me" />Запомнить меня</label>
+  <br />
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  <input type="submit" value="Войти" />
+</form>
+<br />
+<p>Или <a th:href="@{/join}">присоединяйтесь</a> к нашей системе</p>
+<br />
+<p>Также вы можете зайти в систему под <a th:href="@{/test}">тестовым пользователем</a> для демонстрациии</p>
+</body>
+</html>

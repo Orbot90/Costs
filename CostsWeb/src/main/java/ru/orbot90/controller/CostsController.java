@@ -24,17 +24,17 @@ public class CostsController {
 
     @RequestMapping("/login")
     public String showLoginPage(ModelMap model) {
-        return "login";
+        return "/WEB-INF/views/login.html";
     }
 
     @RequestMapping({"/main", "/"})
     public String showMain(ModelMap model) {
-        return "main";
+        return "/WEB-INF/views/main.html";
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.GET)
     public String join(ModelMap model) {
-        return "registration";
+        return "/WEB-INF/views/registration.html";
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -44,13 +44,13 @@ public class CostsController {
         User user = new User(userName, password, balance, email);
         accountRepository.save(user);
         userService.signIn(user);
-        return "joined";
+        return "/WEB-INF/views/joined.html";
     }
 
     @RequestMapping(value = "/test")
     public String testEnter(ModelMap model) {
         User user = accountRepository.getUserByUserName("test");
         userService.signIn(user);
-        return "success";
+        return "/WEB-INF/views/success.html";
     }
 }

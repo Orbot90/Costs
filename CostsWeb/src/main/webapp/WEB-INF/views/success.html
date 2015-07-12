@@ -1,0 +1,15 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Вы зашли</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8-" />
+</head>
+<body>
+<p>Поздравляю! Вы успешно залогинились</p>
+<script language="JavaScript" type="text/javascript">
+  function reDirect(){
+    document.location.href='<th:block th:text="@{/main}" />';
+  }
+  setTimeout( 'reDirect()', 1000 );
+</script>
+</body>
+</html>

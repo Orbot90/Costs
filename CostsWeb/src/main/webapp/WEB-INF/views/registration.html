@@ -1,18 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: orbot
-  Date: 06.07.15
-  Time: 23:17
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Регистрация</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8-" />
 </head>
 <body>
   <h1>Введите свои данные для регистрации</h1>
-<form action="${pageContext.request.contextPath}/join" method="post">
+<form th:action="@{/join}" method="post">
   <label for="login">Логин:</label>
   <input type="text" size="15" id="login" name="login" />
   <br />
@@ -26,9 +19,9 @@
   <input type="number" size="10" id="bal" name="balance" />
   <br />
   <label for="email">Email:</label>
-  <input type="text" size="15" id="email" name="email">
+  <input type="text" size="15" id="email" name="email" />
   <br />
-  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
   <input type="submit" value="Зарегистрироваться" />
 </form>
 </body>
