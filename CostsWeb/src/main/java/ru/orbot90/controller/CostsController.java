@@ -1,7 +1,5 @@
 package ru.orbot90.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/")
 public class CostsController {
-    private static final Logger LOG = LoggerFactory.getLogger(CostsController.class);
 
     @Autowired
     private UserRepository accountRepository;
@@ -96,7 +93,6 @@ public class CostsController {
             cost.setDate(costDate);
             costRepository.save(cost);
         } catch (ParseException e) {
-            LOG.info("Parse error: " + e.getMessage());
             mv.addObject("parseerror", 1);
         }
         return mv;
@@ -131,7 +127,6 @@ public class CostsController {
                     .filter(cost -> cost.getDate().getTime() > begin.getTime() && cost.getDate().getTime() < finish.getTime())
                     .collect(Collectors.toList());
         } catch (ParseException e) {
-            LOG.info("Parse error: " + e.getMessage());
         }
         double sum = costList
                 .stream()
