@@ -3,11 +3,33 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title></title>
+    <script>
+        function applyfilter() {
+            var left = document.getElementById('leftdate').value;
+            var right = document.getElementById('rightdate').value;
+            var link = '<th:block th:text="@{/history}" />'
+            document.location.href=link + '/' + left + '/' + right;
+        }
+    </script>
 </head>
 <body>
 <a th:href="@{/main}">На главную</a>
 <br />
 <br />
+<span>Показать период</span> <br />
+<label>с:<input type="date" size="10" id="leftdate" name="leftdate" /></label>
+<label>По:<input type="date" size="10" id="rightdate" name="rightdate" /></label>
+<br />
+<button onclick="applyfilter()">Применить</button>
+<br />
+<br />
+<th:block th:if="${begin} != null and ${finish} != null">
+    <p>История за период с <span th:text="${begin}" /> по <span th:text="${finish}" /></p>
+</th:block>
+<th:block th:unless="${begin} != null and ${finish} != null">
+    <p>Показана история за всё время</p>
+</th:block>
+<p>За данный период истрачено <span th:text="${costsum}" /></p>
 <th:block th:each="cost : ${costlist}">
     <span th:if="${cost.isCost()}">Расход</span>
     <span th:if="${!cost.isCost()}">Доход</span>

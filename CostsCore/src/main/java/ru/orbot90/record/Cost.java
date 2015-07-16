@@ -28,7 +28,7 @@ public class Cost {
     private double value;
     @ManyToOne
     private User user;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tag")
     private List<String> tags;
     @Column(name = "description")

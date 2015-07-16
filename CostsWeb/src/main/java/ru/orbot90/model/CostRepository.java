@@ -10,6 +10,8 @@ import ru.orbot90.user.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by orbot on 12.07.15.
@@ -45,6 +47,10 @@ public class CostRepository {
     }
 
     public List<Cost> getListOfRecordsByDates(User user, Date beginDate, Date finishDate) {
-        return null;
+        List<Cost> costList = getListOfRecordsByUser(user);
+        costList = costList.stream()
+                .filter(cost -> cost.getDate().getTime() > beginDate.getTime() && cost.getDate().getTime() < finishDate.getTime())
+                .collect(Collectors.toList());
+        return costList;
     }
 }

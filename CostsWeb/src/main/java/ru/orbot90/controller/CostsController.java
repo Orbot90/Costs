@@ -1,8 +1,11 @@
 package ru.orbot90.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by orbot on 06.07.15.
@@ -27,6 +31,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class CostsController {
+    private static final Logger LOG = LoggerFactory.getLogger(CostsController.class);
 
     @Autowired
     private UserRepository accountRepository;
@@ -91,6 +96,7 @@ public class CostsController {
             cost.setDate(costDate);
             costRepository.save(cost);
         } catch (ParseException e) {
+            LOG.info("Parse error: " + e.getMessage());
             mv.addObject("parseerror", 1);
         }
         return mv;
@@ -100,8 +106,42 @@ public class CostsController {
     public ModelAndView showHistory(HttpServletRequest req) {
         ModelAndView mv = new ModelAndView("history");
         User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
-        List<Cost> costList = costRepository.getListOfRecordsByUser(user);
+        List<Cost> costList = user.getCosts();
         mv.addObject("costlist", costList);
+        double sum = costList
+                .stream()
+                .filter(cost -> cost.isCost())
+                .map(cost -> cost.getValue())
+                .reduce(0d, (acc, elem) -> acc + elem);
+        mv.addObject("costsum", sum);
+        return mv;
+    }
+
+    @RequestMapping(value="/history/{beginDate}/{finishDate}")
+    public ModelAndView showTimedHistory(@PathVariable String beginDate, @PathVariable String finishDate,HttpServletRequest req) {
+        ModelAndView mv = new ModelAndView("history");
+        User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
+        List<Cost> costList = user.getCosts();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date begin = dateFormat.parse(beginDate);
+            Date finish = dateFormat.parse(finishDate);
+            costList = costList
+                    .stream()
+                    .filter(cost -> cost.getDate().getTime() > begin.getTime() && cost.getDate().getTime() < finish.getTime())
+                    .collect(Collectors.toList());
+        } catch (ParseException e) {
+            LOG.info("Parse error: " + e.getMessage());
+        }
+        double sum = costList
+                .stream()
+                .filter(cost -> cost.isCost())
+                .map(cost -> cost.getValue())
+                .reduce(0d, (acc, elem) -> acc + elem);
+        mv.addObject("costlist", costList);
+        mv.addObject("begin", beginDate);
+        mv.addObject("finish", finishDate);
+        mv.addObject("costsum", sum);
         return mv;
     }
 }
