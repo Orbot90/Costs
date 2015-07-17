@@ -5,7 +5,7 @@
   <script>
     function showForm() {
       document.getElementById("newcostform").style.display = "block";
-      document.getElementById("date").valueAsDate = new Date();
+      // document.getElementById("date").valueAsDate = new Date();
     }
 
     function logOut() {
@@ -13,6 +13,14 @@
     }
   </script>
 
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#datepick').datepicker({dateFormat:'yy-mm-dd'});
+    });
+  </script>
 </head>
 <body>
 <h2>Здравствуйте, <span th:text="${username}" /></h2>
@@ -29,8 +37,8 @@
     <label for="num">Сумма:</label><br />
     <input type="number" id="num" name="value" />
     <br />
-    <label for="date">Дата:</label>
-    <input type="date" id="date" name="date" />
+    <label for="datepick">Дата:</label>
+    <input type="text" id="datepick" name="date" />
     <br />
     <label for="desc">Описание:</label>
     <br />
