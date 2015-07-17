@@ -103,6 +103,8 @@ public class CostsController {
         ModelAndView mv = new ModelAndView("history");
         User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
         List<Cost> costList = user.getCosts();
+        costList.stream()
+                .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())));
         mv.addObject("costlist", costList);
         double sum = costList
                 .stream()
