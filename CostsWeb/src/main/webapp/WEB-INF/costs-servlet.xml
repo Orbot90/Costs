@@ -33,4 +33,5 @@
 
     <import resource="data.xml" />
 
+    <mvc:resources mapping="/resources/**" location="/resources/" />
 </beans>
