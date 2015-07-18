@@ -26,7 +26,7 @@ public class User {
     private String fullName;
     @Column(name = "user_password", nullable = false)
     private String password;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Cost> costs;
     @Column(name = "balance")
     private double balance;

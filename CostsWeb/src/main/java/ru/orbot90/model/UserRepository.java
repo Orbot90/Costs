@@ -43,4 +43,12 @@ public class UserRepository {
         return user;
     }
 
+    public void updateUser(User user) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.update(user);
+        tx.commit();
+        session.close();
+    }
+
 }

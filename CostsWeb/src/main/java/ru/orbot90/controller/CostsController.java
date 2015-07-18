@@ -91,7 +91,32 @@ public class CostsController {
             Date costDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
             Cost cost = new Cost(value, desc, type == 0, tagsList, user);
             cost.setDate(costDate);
-            costRepository.save(cost);
+            List<Cost> changedBalance = user.getCosts();
+            changedBalance.add(cost);
+            changedBalance = changedBalance.stream()
+                    .sorted((cost1, cost2) -> ((Long)cost1.getDate().getTime()).compareTo((Long)cost2.getDate().getTime()))
+                    .collect(Collectors.toList());
+            if(changedBalance.size() > 0) {
+                double balance = 0;
+                Cost changed;
+                for (int i = 0; i < changedBalance.size(); i++) {
+                    changed = changedBalance.get(i);
+                    if(changed.isCost()) {
+                        changed.setCurrentBalance(balance - changed.getValue());
+                    } else {
+                        changed.setCurrentBalance(balance + changed.getValue());
+                    }
+                    balance = changed.getCurrentBalance();
+                }
+            }
+            if(cost.isCost()) {
+                user.decreaseBal(cost.getValue());
+            } else {
+                user.increaseBal(cost.getValue());
+            }
+
+            accountRepository.updateUser(user);
+//            costRepository.save(cost);
         } catch (ParseException e) {
             mv.addObject("parseerror", 1);
         }
@@ -103,8 +128,9 @@ public class CostsController {
         ModelAndView mv = new ModelAndView("history");
         User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
         List<Cost> costList = user.getCosts();
-        costList.stream()
-                .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())));
+        costList = costList.stream()
+                .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())))
+                .collect(Collectors.toList());
         mv.addObject("costlist", costList);
         double sum = costList
                 .stream()
