@@ -1,8 +1,13 @@
 package ru.orbot90.record;
 
+import org.hibernate.annotations.*;
 import ru.orbot90.user.User;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 
@@ -11,15 +16,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "costs")
-@NamedQueries({
-        @NamedQuery(name = Cost.GET_COST_LIST_BY_DATE, query = "select c from Cost c where c.user.userName = :username and c.date > :beginDate and c.date < :finishDate"),
-        @NamedQuery(name = Cost.GET_COST_LIST_BY_USER, query = "select c from Cost c where c.user.userName = :username")
-})
-
+@NamedQuery(name = Cost.DELETE_COST_BY_ID, query = "delete from Cost c where id = :id")
 public class Cost {
 
-    public static final String GET_COST_LIST_BY_DATE = "Cost.findByDate";
-    public static final String GET_COST_LIST_BY_USER = "Cost.findByUser";
+    public static final String DELETE_COST_BY_ID = "Cost.deleteById";
 
     @Id
     @GeneratedValue
@@ -27,9 +27,10 @@ public class Cost {
     @Column(name = "value", nullable = false)
     private double value;
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_cost")
     private User user;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "tag")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<String> tags;
     @Column(name = "description")
     private String description;

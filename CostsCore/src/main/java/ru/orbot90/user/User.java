@@ -1,8 +1,13 @@
 package ru.orbot90.user;
 
+import org.hibernate.annotations.*;
 import ru.orbot90.record.Cost;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -27,6 +32,7 @@ public class User {
     @Column(name = "user_password", nullable = false)
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Cost> costs;
     @Column(name = "balance")
     private double balance;

@@ -200,11 +200,15 @@ public class CostsController {
         long idLong = Long.parseLong(id);
         Principal principal = req.getUserPrincipal();
         User user = accountRepository.getUserByUserName(principal.getName());
-        List<Cost> costList = user.getCosts()
+        Cost deletedCost = user.getCosts()
                 .stream()
-                .filter(cost -> cost.getId() != idLong)
-                .collect(Collectors.toList());
-        user.setCosts(costList);
+                .filter(cost -> cost.getId() == Long.parseLong(id))
+                .collect(Collectors.toList())
+                .get(0);
+        if(deletedCost.getUser().equals(user)) {
+            deletedCost.setUser(null);
+        }
+        user.getCosts().remove(deletedCost);
         accountRepository.updateUser(user);
         return showHistory(req, all);
     }

@@ -55,7 +55,7 @@
     <br />
     Описание: <span th:text="${cost.getDescription()}" />
     <br />
-    Тэги: <span th:text="${cost.getTags()}" />
+    Тэги: <span th:each="tag : ${cost.getTags()}"><a th:href="@{/history?tag=} + ${tag}" th:text="${tag}"/></span>
     <br />
     Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
     <br/>
