@@ -138,7 +138,7 @@ public class CostsController {
 
             costList = costList
                     .stream()
-                    .filter(cost -> cost.getDate().getTime() > begin && cost.getDate().getTime() < finish)
+                    .filter(cost -> cost.getDate().getTime() >= begin && cost.getDate().getTime() <= finish)
                     .collect(Collectors.toList());
             } catch (ParseException e) {
 
