@@ -30,6 +30,8 @@ public class User {
     private List<Cost> costs;
     @Column(name = "balance")
     private double balance;
+    @Column(name = "start_balance")
+    private double startBalance;
 
     private String role = "ROLE_USER";
 
@@ -40,7 +42,8 @@ public class User {
     public User(String userName, String password, String balance, String email) {
         this.userName = userName;
         this.password = password;
-        this.balance = Long.parseLong(balance);
+        this.balance = Double.parseDouble(balance);
+        this.startBalance = Double.parseDouble(balance);
         this.eMail = email;
         this.role = "ROLE_USER";
     }
@@ -119,5 +122,13 @@ public class User {
 
     public void decreaseBal(double money) {
         this.balance -= money;
+    }
+
+    public double getStartBalance() {
+        return startBalance;
+    }
+
+    public void setStartBalance(double startBalance) {
+        this.startBalance = startBalance;
     }
 }

@@ -96,7 +96,7 @@ public class CostsController {
                     .sorted((cost1, cost2) -> ((Long)cost1.getDate().getTime()).compareTo((Long)cost2.getDate().getTime()))
                     .collect(Collectors.toList());
             if(changedBalance.size() > 0) {
-                double balance = 0;
+                double balance = user.getStartBalance();
                 Cost changed;
                 for (int i = 0; i < changedBalance.size(); i++) {
                     changed = changedBalance.get(i);
@@ -109,7 +109,6 @@ public class CostsController {
                 }
             }
             accountRepository.updateUser(user);
-//            costRepository.save(cost);
         } catch (ParseException e) {
             mv.addObject("parseerror", 1);
         }

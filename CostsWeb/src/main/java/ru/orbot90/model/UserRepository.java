@@ -48,11 +48,15 @@ public class UserRepository {
     public void updateUser(User user) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        Cost cost = user.getCosts()
-                .stream()
-                .sorted((cost1, cost2) -> ((Long)cost2.getDate().getTime()).compareTo((Long)cost1.getDate().getTime()))
-                .collect(Collectors.toList()).get(0);
-        user.setBalance(cost.getCurrentBalance());
+        if(user.getCosts().size() > 0) {
+            Cost cost = user.getCosts()
+                    .stream()
+                    .sorted((cost1, cost2) -> ((Long) cost2.getDate().getTime()).compareTo((Long) cost1.getDate().getTime()))
+                    .collect(Collectors.toList()).get(0);
+            user.setBalance(cost.getCurrentBalance());
+        } else {
+            user.setBalance(user.getStartBalance());
+        }
         session.update(user);
         tx.commit();
         session.close();
