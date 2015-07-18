@@ -171,7 +171,7 @@ public class CostsController {
             Date finish = dateFormat.parse(finishDate);
             costList = costList
                     .stream()
-                    .filter(cost -> cost.getDate().getTime() > begin.getTime() && cost.getDate().getTime() < finish.getTime())
+                    .filter(cost -> cost.getDate().getTime() >= begin.getTime() && cost.getDate().getTime() <= finish.getTime())
                     .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())))
                     .collect(Collectors.toList());
         } catch (ParseException e) {
