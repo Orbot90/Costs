@@ -25,6 +25,7 @@
 </head>
 <body>
 <a th:href="@{/main}">На главную</a>
+<a th:href="@{/main?add=1}">Добавить ещё запись</a>
 <br />
 <br />
 <span>Показать период</span> <br />
@@ -33,12 +34,14 @@
 <br />
 <button onclick="applyfilter()">Применить</button>
 <br />
+<a th:href="@{/history}">История за текущий месяц</a>
+<a th:href="@{/history?all=1}">История за все время</a>
 <br />
 <th:block th:if="${begin} != null and ${finish} != null">
     <p>История за период с <span th:text="${begin}" /> по <span th:text="${finish}" /></p>
 </th:block>
-<th:block th:unless="${begin} != null and ${finish} != null">
-    <p>Показана история за всё время</p>
+<th:block th:unless="${begin} != null and ${finish} != null and ${param.all} == null">
+    <p>Показана история за текущий месяц</p>
 </th:block>
 <p>За данный период истрачено <span th:text="${costsum}" /></p>
 <p>Получено: <span th:text="${earned}"></span></p>
@@ -58,6 +61,7 @@
     <br/>
     <form th:if="${param.edit == null or !param.edit[0].equals(cost.getId().toString())}" th:action="@{/history/delete}" method="get">
         <input type="hidden" name="id" th:value="${cost.getId()}" />
+        <input type="hidden" th:if="${param.all} != null" name="all" value="1" />
         <input type="submit" value="Удалить" />
     </form>
     <br />

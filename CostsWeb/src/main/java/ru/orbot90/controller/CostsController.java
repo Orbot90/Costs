@@ -15,9 +15,11 @@ import ru.orbot90.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,14 +117,34 @@ public class CostsController {
     }
 
     @RequestMapping(value = "/history")
-    public ModelAndView showHistory(HttpServletRequest req) {
+    public ModelAndView showHistory(HttpServletRequest req, @RequestParam(value = "all", required = false)String all) {
         ModelAndView mv = new ModelAndView("history");
         User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
         List<Cost> costList = user.getCosts();
         costList = costList.stream()
                 .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())))
                 .collect(Collectors.toList());
-        mv.addObject("costlist", costList);
+        if(all == null) {
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH) + 1;
+            String monthString = month < 10 ? "0" + month : String.valueOf(month);
+            String monthBegin = calendar.get(Calendar.YEAR) + "-" + monthString + "-" + "01";
+            String monthEnd = calendar.get(Calendar.YEAR) + "-" + monthString + "-" + calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Long begin;
+            Long finish;
+            try {
+                begin = dateFormat.parse(monthBegin).getTime();
+                finish = dateFormat.parse(monthEnd).getTime();
+
+            costList = costList
+                    .stream()
+                    .filter(cost -> cost.getDate().getTime() > begin && cost.getDate().getTime() < finish)
+                    .collect(Collectors.toList());
+            } catch (ParseException e) {
+
+            }
+        }
         double spent = costList
                 .stream()
                 .filter(cost -> cost.isCost())
@@ -133,6 +155,7 @@ public class CostsController {
                 .filter(cost -> !cost.isCost())
                 .map(cost -> cost.getValue())
                 .reduce(0d, (acc, elem) -> acc + elem);
+        mv.addObject("costlist", costList);
         mv.addObject("costsum", spent);
         mv.addObject("earned", earned);
         return mv;
@@ -173,7 +196,8 @@ public class CostsController {
     }
 
     @RequestMapping("/history/delete")
-    public ModelAndView deleteRecord(HttpServletRequest req, @RequestParam(value="id")String id) {
+    public ModelAndView deleteRecord(HttpServletRequest req, @RequestParam(value="id")String id,
+                                     @RequestParam(value = "all", required = false)String all) {
         long idLong = Long.parseLong(id);
         Principal principal = req.getUserPrincipal();
         User user = accountRepository.getUserByUserName(principal.getName());
@@ -183,6 +207,6 @@ public class CostsController {
                 .collect(Collectors.toList());
         user.setCosts(costList);
         accountRepository.updateUser(user);
-        return showHistory(req);
+        return showHistory(req, all);
     }
 }
