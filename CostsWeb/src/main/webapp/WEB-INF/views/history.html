@@ -8,7 +8,7 @@
             var left = document.getElementById('leftdate').value;
             var right = document.getElementById('rightdate').value;
             var link = '<th:block th:text="@{/history}" />'
-            document.location.href=link + '/' + left + '/' + right;
+            document.location.href = link + '/' + left + '/' + right;
         }
     </script>
 
@@ -41,6 +41,8 @@
     <p>Показана история за всё время</p>
 </th:block>
 <p>За данный период истрачено <span th:text="${costsum}" /></p>
+<p>Получено: <span th:text="${earned}"></span></p>
+<p>Сэкономлено: <span th:text="${earned - costsum}"></span></p>
 <th:block th:each="cost : ${costlist}">
     <span th:if="${cost.isCost()}">Расход</span>
     <span th:if="${!cost.isCost()}">Доход</span>
@@ -53,6 +55,11 @@
     Тэги: <span th:text="${cost.getTags()}" />
     <br />
     Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
+    <br/>
+    <form th:if="${param.edit == null or !param.edit[0].equals(cost.getId().toString())}" th:action="@{/history/delete}" method="get">
+        <input type="hidden" name="id" th:value="${cost.getId()}" />
+        <input type="submit" value="Удалить" />
+    </form>
     <br />
     <span>======================================</span>
     <br />

@@ -33,7 +33,7 @@
   <p>Здесь вы можете посмотреть <a th:href="@{/history}">историю</a> своего дохода и расходов, либо добавить <a href="#" onclick="showForm(); return false;" >новую запись</a>.</p>
 
 <div id="newcostform" style="display: none;">
-  <form action="/main" method="post">
+  <form th:action="@{/main}" method="post">
     <label for="num">Сумма:</label><br />
     <input type="number" id="num" name="value" />
     <br />

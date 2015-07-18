@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.orbot90.model.CostRepository;
 import ru.orbot90.model.UserRepository;
 import ru.orbot90.model.UserService;
 import ru.orbot90.record.Cost;
@@ -32,8 +31,6 @@ public class CostsController {
 
     @Autowired
     private UserRepository accountRepository;
-    @Autowired
-    private CostRepository costRepository;
     @Autowired
     private UserService userService;
 
@@ -109,12 +106,6 @@ public class CostsController {
                     balance = changed.getCurrentBalance();
                 }
             }
-            if(cost.isCost()) {
-                user.decreaseBal(cost.getValue());
-            } else {
-                user.increaseBal(cost.getValue());
-            }
-
             accountRepository.updateUser(user);
 //            costRepository.save(cost);
         } catch (ParseException e) {
@@ -132,12 +123,18 @@ public class CostsController {
                 .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())))
                 .collect(Collectors.toList());
         mv.addObject("costlist", costList);
-        double sum = costList
+        double spent = costList
                 .stream()
                 .filter(cost -> cost.isCost())
                 .map(cost -> cost.getValue())
                 .reduce(0d, (acc, elem) -> acc + elem);
-        mv.addObject("costsum", sum);
+        double earned = costList
+                .stream()
+                .filter(cost -> !cost.isCost())
+                .map(cost -> cost.getValue())
+                .reduce(0d, (acc, elem) -> acc + elem);
+        mv.addObject("costsum", spent);
+        mv.addObject("earned", earned);
         return mv;
     }
 
@@ -157,15 +154,35 @@ public class CostsController {
                     .collect(Collectors.toList());
         } catch (ParseException e) {
         }
-        double sum = costList
+        double spent = costList
                 .stream()
                 .filter(cost -> cost.isCost())
+                .map(cost -> cost.getValue())
+                .reduce(0d, (acc, elem) -> acc + elem);
+        double earned = costList
+                .stream()
+                .filter(cost -> !cost.isCost())
                 .map(cost -> cost.getValue())
                 .reduce(0d, (acc, elem) -> acc + elem);
         mv.addObject("costlist", costList);
         mv.addObject("begin", beginDate);
         mv.addObject("finish", finishDate);
-        mv.addObject("costsum", sum);
+        mv.addObject("costsum", spent);
+        mv.addObject("earned", earned);
         return mv;
+    }
+
+    @RequestMapping("/history/delete")
+    public ModelAndView deleteRecord(HttpServletRequest req, @RequestParam(value="id")String id) {
+        long idLong = Long.parseLong(id);
+        Principal principal = req.getUserPrincipal();
+        User user = accountRepository.getUserByUserName(principal.getName());
+        List<Cost> costList = user.getCosts()
+                .stream()
+                .filter(cost -> cost.getId() != idLong)
+                .collect(Collectors.toList());
+        user.setCosts(costList);
+        accountRepository.updateUser(user);
+        return showHistory(req);
     }
 }
