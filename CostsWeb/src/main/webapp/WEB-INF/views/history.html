@@ -43,6 +43,7 @@
 <th:block th:unless="${begin} != null and ${finish} != null and ${param.all} == null">
     <p>Показана история за текущий месяц</p>
 </th:block>
+<p th:if="${param.tag != null}">Статистика по тэгу: <span th:text="${param.tag[0]}"></span></p>
 <p>За данный период истрачено <span th:text="${costsum}" /></p>
 <p>Получено: <span th:text="${earned}"></span></p>
 <p>Сэкономлено: <span th:text="${earned - costsum}"></span></p>
@@ -55,13 +56,14 @@
     <br />
     Описание: <span th:text="${cost.getDescription()}" />
     <br />
-    Тэги: <span th:each="tag : ${cost.getTags()}"><a th:href="@{/history?tag=} + ${tag}" th:text="${tag}"/></span>
+    Тэги: <span th:each="tag : ${cost.getTags()}"><a th:href="@{/history(tag=${tag}, all=${param.all})}" th:text="${tag}"/></span>
     <br />
     Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
     <br/>
     <form th:if="${param.edit == null or !param.edit[0].equals(cost.getId().toString())}" th:action="@{/history/delete}" method="get">
         <input type="hidden" name="id" th:value="${cost.getId()}" />
         <input type="hidden" th:if="${param.all} != null" name="all" value="1" />
+        <th:block th:unless="${param.tag} == null"><input type="hidden" name="tag" th:value="${param.tag[0]}" /></th:block>
         <input type="submit" value="Удалить" />
     </form>
     <br />

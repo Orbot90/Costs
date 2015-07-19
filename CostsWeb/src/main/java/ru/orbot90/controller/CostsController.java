@@ -116,14 +116,20 @@ public class CostsController {
     }
 
     @RequestMapping(value = "/history")
-    public ModelAndView showHistory(HttpServletRequest req, @RequestParam(value = "all", required = false)String all) {
+    public ModelAndView showHistory(HttpServletRequest req, @RequestParam(value = "all", required = false)String all,
+                                    @RequestParam(value = "tag", required = false)String tag) {
         ModelAndView mv = new ModelAndView("history");
         User user = accountRepository.getUserByUserName(req.getUserPrincipal().getName());
         List<Cost> costList = user.getCosts();
         costList = costList.stream()
                 .sorted((cost1, cost2) -> new Long(cost1.getDate().getTime()).compareTo(new Long(cost2.getDate().getTime())))
                 .collect(Collectors.toList());
-        if(all == null) {
+        if(tag != null) {
+            costList = costList.stream()
+                    .filter(cost -> cost.getTags().contains(tag))
+                    .collect(Collectors.toList());
+        }
+        if(all == null || !all.equals("1")) {
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH) + 1;
             String monthString = month < 10 ? "0" + month : String.valueOf(month);
@@ -196,7 +202,8 @@ public class CostsController {
 
     @RequestMapping("/history/delete")
     public ModelAndView deleteRecord(HttpServletRequest req, @RequestParam(value="id")String id,
-                                     @RequestParam(value = "all", required = false)String all) {
+                                     @RequestParam(value = "all", required = false)String all,
+                                     @RequestParam(value = "tag", required = false)String tag) {
         long idLong = Long.parseLong(id);
         Principal principal = req.getUserPrincipal();
         User user = accountRepository.getUserByUserName(principal.getName());
@@ -210,6 +217,6 @@ public class CostsController {
         }
         user.getCosts().remove(deletedCost);
         accountRepository.updateUser(user);
-        return showHistory(req, all);
+        return showHistory(req, all, tag);
     }
 }
