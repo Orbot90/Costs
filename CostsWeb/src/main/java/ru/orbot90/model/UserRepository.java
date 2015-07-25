@@ -2,7 +2,6 @@ package ru.orbot90.model;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * Created by orbot on 11.07.15.
  */
 @Repository
-@Transactional(readOnly = true)
+@Transactional
 public class UserRepository {
 
     @Autowired
@@ -27,27 +26,22 @@ public class UserRepository {
     PasswordEncoder passwordEncoder;
 
     public User save(User user) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         session.save(user);
-        tx.commit();
-        session.close();
         return user;
     }
 
     public User getUserByUserName(String userName) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         User user = (User)session.getNamedQuery(User.FIND_BY_USERNAME)
                 .setString("userName", userName)
                 .uniqueResult();
-        session.close();
         return user;
     }
 
     public void updateUser(User user) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         if(user.getCosts().size() > 0) {
             Cost cost = user.getCosts()
                     .stream()
@@ -58,8 +52,6 @@ public class UserRepository {
             user.setBalance(user.getStartBalance());
         }
         session.update(user);
-        tx.commit();
-        session.close();
     }
 
 }
