@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.orbot90.record.Cost;
 import ru.orbot90.user.User;
 
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import java.util.stream.Collectors;
 
 
