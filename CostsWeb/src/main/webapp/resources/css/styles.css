@@ -1,0 +1,58 @@
+body {
+    font-family: Helvetica;
+    font-size: 16px;
+}
+
+.alert {
+    clear: both;
+    width: 15%;
+    float: none;
+    margin: 0 auto;
+    font-size: 14px;
+}
+
+body {
+    text-align: center;
+}
+
+.field {
+    clear: both;
+    text-align: right;
+    line-height: 20px;
+
+}
+
+label {
+    padding-right: 10px;
+}
+
+textarea {
+    float: inherit;
+}
+
+.form {
+    float: left;
+    margin: 0 auto;
+    width: 55%;
+    text-align: center;
+    clear: both;
+}
+
+#submit {
+    margin: 0 auto;
+    width: 15%;
+}
+
+.addition {
+    clear: both;
+    padding-top: 10px;
+}
+
+.cost-block {
+    border: 1px solid black;
+    width: 40%;
+    margin: 0 auto;
+    border-radius: 10px;
+    font-size: 20px;
+    background-color: #9acfea;
+}

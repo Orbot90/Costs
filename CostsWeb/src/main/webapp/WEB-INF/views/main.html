@@ -21,6 +21,9 @@
       $('#datepick').datepicker({dateFormat:'yy-mm-dd'});
     });
   </script>
+  <link th:href="@{/resources/bootstrap/bootstrap.css}" rel="stylesheet" type="text/css" />
+  <link th:href="@{/resources/bootstrap/bootstrap-theme.css}" rel="stylesheet" type="text/css" />
+  <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h2>Здравствуйте, <span th:text="${username}" /></h2>
@@ -30,31 +33,27 @@
 </form>
 <a href="#" onclick="logOut();">Выйти</a>
 
-  <p>Здесь вы можете посмотреть <a th:href="@{/history}">историю</a> своего дохода и расходов, либо добавить <a th:href="@{/main?add=1}">новую запись</a>.</p>
-
-<div id="newcostform" th:if="${param.add != null}">
-  <form th:action="@{/main}" method="post">
-    <label for="num">Сумма:</label><br />
-    <input type="number" id="num" name="value" />
-    <br />
-    <label for="datepick">Дата:</label>
-    <input type="text" id="datepick" name="date" />
-    <br />
-    <label for="desc">Описание:</label>
-    <br />
-    <textarea rows="10" cols="15" id="desc" name="description"></textarea>
-    <br />
-    <label for="tags">Тэги:</label><br />
-    <input type="text" size="40" name="tags" id="tags" />
-    <br />
-    <label><input type="radio" name="type" value="0" checked="true" />Расход</label><br />
-    <label><input type="radio" name="type" value="1" />Доход</label><br />
+<p>Здесь вы можете посмотреть <a th:href="@{/history}">историю</a> своего дохода и расходов, либо добавить <a th:href="@{/main?add=1}">новую запись</a>.</p>
+<th:block th:if="${param.parseerror != null}">
+  <div class="alert alert-danger">Неправильный формат даты</div>
+</th:block>
+<div style="padding-top: 10px;" id="newcostform" th:if="${param.add != null}">
+  <form class="form" th:action="@{/main}" method="post">
+    <div class="field"> <label for="num">Сумма:</label>
+      <input type="number" id="num" name="value" /></div>
+    <div class="field"><label for="datepick">Дата:</label>
+      <input type="text" id="datepick" name="date" /></div>
+    <div class="field"><label for="desc">Описание:</label>
+      <br/>
+      <textarea rows="10" cols="19" id="desc" name="description"></textarea>
+    </div>
+    <div class="field" style="clear: both;"> <label style="margin-right: 50px;" for="tags">Тэги:</label><br/>
+      <input style="margin-right: -70px;" type="text" size="40" name="tags" id="tags" /></div>
+    <div class="field"> <label>Расход<input type="radio" name="type" value="0" checked="true" /></label></div>
+    <div class="field" > <label>Доход<input type="radio" name="type" value="1" /></label></div>
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <input type="submit" value="Отправить" />
+    <div class="field"><input id="submit" type="submit" value="Отправить" /></div>
   </form>
 </div>
-<th:block th:if="${param.parseerror != null}">
-  <div style="color: red;">Неправильный формат даты</div>
-</th:block>
 </body>
 </html>

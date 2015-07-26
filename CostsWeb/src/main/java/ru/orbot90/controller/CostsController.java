@@ -205,7 +205,6 @@ public class CostsController {
     public ModelAndView deleteRecord(HttpServletRequest req, @RequestParam(value="id")String id,
                                      @RequestParam(value = "all", required = false)String all,
                                      @RequestParam(value = "tag", required = false)String tag) {
-        long idLong = Long.parseLong(id);
         Principal principal = req.getUserPrincipal();
         User user = accountRepository.getUserByUserName(principal.getName());
         Cost deletedCost = user.getCosts()

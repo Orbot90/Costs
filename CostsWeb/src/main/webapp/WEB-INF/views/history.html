@@ -15,7 +15,9 @@
     <link th:href="@{/resources/jquery/jquery-ui.css}" rel="stylesheet" type="text/css"/>
     <script th:src="@{/resources/jquery/jquery.js}"></script>
     <script th:src="@{/resources/jquery/jquery-ui.js}"></script>
-
+    <link th:href="@{/resources/bootstrap/bootstrap.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/resources/bootstrap/bootstrap-theme.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/resources/css/styles.css}" rel="stylesheet" type="text/css" />
     <script>
         $(document).ready(function() {
             $('#leftdate').datepicker({dateFormat:'yy-mm-dd'});
@@ -48,27 +50,28 @@
 <p>Получено: <span th:text="${earned}"></span></p>
 <p>Сэкономлено: <span th:text="${earned - costsum}"></span></p>
 <th:block th:each="cost : ${costlist}">
-    <span th:if="${cost.isCost()}">Расход</span>
-    <span th:if="${!cost.isCost()}">Доход</span>
-    <div>Дата: <span th:text="${cost.getDate()}" />
-    <br />
-    Количество: <span th:text="${cost.getValue()}" />
-    <br />
-    Описание: <span th:text="${cost.getDescription()}" />
-    <br />
-    Тэги: <span th:each="tag : ${cost.getTags()}"><a th:href="@{/history(tag=${tag}, all=${param.all})}" th:text="${tag}"/></span>
-    <br />
-    Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
-    <br/>
-    <form th:if="${param.edit == null or !param.edit[0].equals(cost.getId().toString())}" th:action="@{/history/delete}" method="get">
-        <input type="hidden" name="id" th:value="${cost.getId()}" />
-        <input type="hidden" th:if="${param.all} != null" name="all" value="1" />
-        <th:block th:unless="${param.tag} == null"><input type="hidden" name="tag" th:value="${param.tag[0]}" /></th:block>
-        <input type="submit" value="Удалить" />
-    </form>
-    <br />
-    <span>======================================</span>
-    <br />
+    <div class="cost-block">
+        <span th:if="${cost.isCost()}">Расход</span>
+        <span th:if="${!cost.isCost()}">Доход</span>
+        <br/>
+        Дата: <span th:text="${cost.getDate()}" />
+        <br />
+        Количество: <span th:text="${cost.getValue()}" />
+        <br />
+        Описание: <span th:text="${cost.getDescription()}" />
+        <br />
+        Тэги: <span th:each="tag : ${cost.getTags()}"><a th:href="@{/history(tag=${tag}, all=${param.all})}" th:text="${tag}"/></span>
+        <br />
+        Текущий баланс: <span th:text="${cost.getCurrentBalance()}" />
+        <br/>
+        <form th:if="${param.edit == null or !param.edit[0].equals(cost.getId().toString())}" th:action="@{/history/delete}" method="get">
+            <input type="hidden" name="id" th:value="${cost.getId()}" />
+            <input type="hidden" th:if="${param.all} != null" name="all" value="1" />
+            <th:block th:unless="${param.tag} == null"><input type="hidden" name="tag" th:value="${param.tag[0]}" /></th:block>
+            <input id="submit" type="submit" value="Удалить" />
+        </form>
+        <br />
+        <br />
     </div>
 </th:block>
 
