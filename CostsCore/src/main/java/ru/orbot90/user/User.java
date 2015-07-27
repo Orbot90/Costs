@@ -137,4 +137,30 @@ public class User {
     public void setStartBalance(double startBalance) {
         this.startBalance = startBalance;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (Double.compare(user.startBalance, startBalance) != 0) return false;
+        if (!userName.equals(user.userName)) return false;
+        return password.equals(user.password);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + password.hashCode();
+        temp = Double.doubleToLongBits(startBalance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
