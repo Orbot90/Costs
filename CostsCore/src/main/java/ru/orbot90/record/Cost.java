@@ -26,7 +26,7 @@ public class Cost {
     private long id;
     @Column(name = "value", nullable = false)
     private double value;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_cost")
     private User user;
     @ElementCollection(fetch = FetchType.EAGER)
