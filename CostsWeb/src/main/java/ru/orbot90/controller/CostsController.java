@@ -91,24 +91,8 @@ public class CostsController {
             Date costDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
             Cost cost = new Cost(value, desc, type == 0, tagsList, user);
             cost.setDate(costDate);
-            List<Cost> changedBalance = user.getCosts();
-            changedBalance.add(cost);
-            changedBalance = changedBalance.stream()
-                    .sorted((cost1, cost2) -> ((Long)cost1.getDate().getTime()).compareTo((Long)cost2.getDate().getTime()))
-                    .collect(Collectors.toList());
-            if(changedBalance.size() > 0) {
-                double balance = user.getStartBalance();
-                Cost changed;
-                for (int i = 0; i < changedBalance.size(); i++) {
-                    changed = changedBalance.get(i);
-                    if(changed.isCost()) {
-                        changed.setCurrentBalance(balance - changed.getValue());
-                    } else {
-                        changed.setCurrentBalance(balance + changed.getValue());
-                    }
-                    balance = changed.getCurrentBalance();
-                }
-            }
+            user.getCosts().add(cost);
+            reCountBalance(user);
             accountRepository.updateUser(user);
         } catch (ParseException e) {
             mv.addObject("parseerror", 1);
@@ -216,7 +200,29 @@ public class CostsController {
             deletedCost.setUser(null);
         }
         user.getCosts().remove(deletedCost);
+        reCountBalance(user);
         accountRepository.updateUser(user);
         return showHistory(req, all, tag);
+    }
+
+
+    private void reCountBalance(User user) {
+        List<Cost> changedBalance = user.getCosts();
+        changedBalance = changedBalance.stream()
+                .sorted((cost1, cost2) -> ((Long)cost1.getDate().getTime()).compareTo((Long)cost2.getDate().getTime()))
+                .collect(Collectors.toList());
+        if(changedBalance.size() > 0) {
+            double balance = user.getStartBalance();
+            Cost changed;
+            for (int i = 0; i < changedBalance.size(); i++) {
+                changed = changedBalance.get(i);
+                if(changed.isCost()) {
+                    changed.setCurrentBalance(balance - changed.getValue());
+                } else {
+                    changed.setCurrentBalance(balance + changed.getValue());
+                }
+                balance = changed.getCurrentBalance();
+            }
+        }
     }
 }

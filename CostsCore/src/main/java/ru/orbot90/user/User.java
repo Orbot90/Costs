@@ -31,7 +31,7 @@ public class User {
     private String fullName;
     @Column(name = "user_password", nullable = false)
     private String password;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Cost> costs;
     @Column(name = "balance")

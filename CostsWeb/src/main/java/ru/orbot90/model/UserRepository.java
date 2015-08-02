@@ -47,7 +47,7 @@ public class UserRepository {
         if(user.getCosts().size() > 0) {
             Cost cost = user.getCosts()
                     .stream()
-                    .sorted((cost1, cost2) -> ((Long) cost2.getDate().getTime()).compareTo((Long) cost1.getDate().getTime()))
+                    .sorted((cost1, cost2) -> ((Long) cost1.getId()).compareTo((Long) cost2.getId()))
                     .collect(Collectors.toList()).get(0);
             user.setBalance(cost.getCurrentBalance());
         } else {
