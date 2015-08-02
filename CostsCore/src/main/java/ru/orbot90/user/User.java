@@ -8,6 +8,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -23,8 +26,10 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
+    @Size(min = 3, max = 20)
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
+    @Pattern(regexp = "^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$")
     @Column(name = "user_email", nullable = false, unique = true)
     private String eMail;
     @Column(name = "user_full_name")

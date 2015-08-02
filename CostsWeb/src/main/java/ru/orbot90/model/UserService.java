@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     public void createTestUser() {
-        createUserIfNotExists(new User("test", "test", "0", "test@test.ru"));
+        createUserIfNotExists(new User("test", "test111", "0", "test@test.ru"));
     }
 
     private void createUserIfNotExists(User user) {
